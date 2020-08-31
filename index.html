@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-fluid">
+    <h1 class="text-primary text-center" id='title'>Расписание</h1>
+    <h2 class="text-center text-secondary" id='currentDateMessage'></h2>
+   
+    <button class="btn " data-toggle="collapse" data-target="#form">Редактировать</button>
+    <form id='form' class='card mb-2 pt-2 collapse'>
+            <div class="form-row mx-auto">
+                <div class="form-group col-md-12">
+                    <label for="inputTitle">Введите название события</label>
+                    <input  id='inputTitle' type="text">
+                </div>
+            </div>
+            <div class="form-row mx-auto">
+                <div class="form-group mx-2">
+                    <label for="timePickerStart">Выберите время начала события</label>
+                    <input id='timePickerStart' type="time" step="1">
+                </div>
+                <div class="form-group mx-2">
+                    <label for="timePickerEnd">Выберите время окончания события</label>
+                    <input id='timePickerEnd' type="time" step="1">
+                </div>
+            </div>
+            <div class="form-row mx-auto">
+                <div class="form-group mx-2">
+                    <label>Выберите дни недели : </label>
+                    
+                    <input id='sunday' type="checkbox">
+                    <label for="sunday">Вск</label>
+                    
+                    <input id='mondey' type="checkbox" checked>
+                    <label for="mondey">Пнд</label>
+                    
+                    <input id='tuesday' type="checkbox" checked>
+                    <label for="tuesday">Вт</label>
+                    
+                    <input id='wednesday' type="checkbox" checked>
+                    <label for="wednesday">Срд</label>
+                    
+                    <input id='thursday' type="checkbox" checked>
+                    <label for="thursday">Чтв</label>
+                    
+                    <input id='friday' type="checkbox" checked>
+                    <label for="friday">Птн</label>
+                   
+                    <input id='saturday' type="checkbox">
+                    <label for="saturday">Сб</label>
+                </div>
+            </div>                  
+            <input class='btn btn-primary' type="button" value='Сохранить' id='saveLesson'>
+        </form>  
+     <form class="card" id="selectDay">
+         <div class="form-row mx-auto">
+            <div class="form-group mb-0">
+            <label>Отображать : </label>
+                    
+                    <input name='selectedDay' id='today' type="radio" value='today' checked>
+                    <label for="today"> Сегодня</label>
+                    
+                    <input name='selectedDay' id='sunday' type="radio" value='0'>
+                    <label for="sunday">Вск</label>
+                    
+                    <input name='selectedDay' id='mondey' type="radio" value='1'>
+                    <label for="mondey">Пнд</label>
+                    
+                    <input name='selectedDay' id='tuesday' type="radio" value='2'>
+                    <label for="tuesday">Вт</label>
+                    
+                    <input name='selectedDay' id='wednesday' type="radio" value='3'>
+                    <label for="wednesday">Срд</label>
+                    
+                    <input name='selectedDay' id='thursday' type="radio" value='4'>
+                    <label for="thursday">Чтв</label>
+                    
+                    <input name='selectedDay' id='friday' type="radio" value='5'>
+                    <label for="friday">Птн</label>
+                    
+                    <input name='selectedDay' id='saturday' type="radio"value='6'>
+                    <label for="saturday">Сб</label>
+                    <input class='btn ml-2' id='btnSelectDay' type="button" value="Применить">
+         </div></div>
+                    
+    </form>
+    <div class="lessonContainer px-1 row">
+        </div>
+           
+    </div>
+    <script src='jquery-3.5.1.min.js'></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
