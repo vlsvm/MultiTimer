@@ -4,7 +4,7 @@ const lessonContainer = document.querySelector('.lessonContainer');
 const days = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
 const months=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь',
 'ноябрь','декабрь'];
-let displayDay = 'today';
+let displayDay = now.getDay();
 document.querySelector('#saveLesson').onclick=()=>{
     createLesson();
 }
@@ -42,8 +42,10 @@ let selectDisplayDay=()=>{
    let radio = document.getElementsByName('selectedDay');
    for(let i=0;i<radio.length;i++){
         if(radio[i].checked===true){
-            displayDay=radio[i].value;
+            displayDay=Number(radio[i].value);
+            if(displayDay==='today') displayDay = now.getDay();
             break;
+            
         }
    }
    refresh();
@@ -52,9 +54,11 @@ function check(lesson){
     let time, header; 
     updateState(lesson);
     if((lesson.state==='Not started')){
-        time = findDifference(lesson.start);
-        header = 'До начала осталось: ';
-        printTimeLeft(lesson,time,header) 
+        if(displayDay === now.getDay()){
+            time = findDifference(lesson.start);
+            header = 'До начала осталось: ';
+            printTimeLeft(lesson,time,header) 
+        }
     }else if((lesson.state==='Ended')){
         //time = findDifference(lesson.start);
         //header = 'До начала осталось: ';
@@ -211,7 +215,7 @@ function refresh(){
 }
 function checkDay(lesson){
     let day = now.getDay();
-    if(displayDay==='today'){
+    if(displayDay===now.getDay()){
         if(lesson.days[day]===true) return true
     }else{
         if(lesson.days[displayDay]==true) {
