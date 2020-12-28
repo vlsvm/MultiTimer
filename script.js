@@ -1,3 +1,4 @@
+
 let now = new Date();
 let lessons =[];
 const lessonContainer = document.querySelector('.lessonContainer');
@@ -42,10 +43,10 @@ let selectDisplayDay=()=>{
    let radio = document.getElementsByName('selectedDay');
    for(let i=0;i<radio.length;i++){
         if(radio[i].checked===true){
-            displayDay=Number(radio[i].value);
-            if(displayDay==='today') displayDay = now.getDay();
+            displayDay=radio[i].value;
+            if(displayDay =='today') displayDay = now.getDay();
+            else displayDay = Number(displayDay);
             break;
-            
         }
    }
    refresh();
@@ -60,9 +61,6 @@ function check(lesson){
             printTimeLeft(lesson,time,header) 
         }
     }else if((lesson.state==='Ended')){
-        //time = findDifference(lesson.start);
-        //header = 'До начала осталось: ';
-        //printTimeLeft(lesson,time,header);
         lesson.containerTimer.textContent='Закончено';
     }else if(lesson.state==='Started'){
         time = findDifference(lesson.end);
@@ -110,11 +108,6 @@ function printMeta(lesson){
     lesson.containerDays.textContent=`Дни недели: ${daysString}`;
 }
 function printTimeLeft(lesson,difference,header){
-    /*
-    if(lesson.state==='Ended'){
-        difference = 24*60*60 - Math.abs(difference);
-    }
-    */
         let hours = Math.floor(difference/(60*60));
         difference = difference % (60*60);
         let minutes = Math.floor(difference/60);
@@ -128,7 +121,6 @@ function deleteLesson(lesson){
     let index = lessons.findIndex((_lesson)=>{
         return _lesson.id===lesson.id;
     })
-    console.log(index);
     lessons.splice(index,1);
 }
 function initLesson(lesson){
@@ -196,7 +188,6 @@ function createLesson(){
     lessons.push(lesson);
     saveData();
     refresh();
-    console.log(lesson);
 }
 function refresh(){
     now = new Date();
@@ -206,24 +197,12 @@ function refresh(){
     }
     if(lessons.length!=0){
         for(let i=0;i<lessons.length;i++){
-            if(checkDay(lessons[i])){
+            if(lessons[i].days[displayDay]){
                 lessons[i].id=i;
                 initLesson(lessons[i]);
             }
         }   
     }
-}
-function checkDay(lesson){
-    let day = now.getDay();
-    if(displayDay===now.getDay()){
-        if(lesson.days[day]===true) return true
-    }else{
-        if(lesson.days[displayDay]==true) {
-            
-            return true
-        }
-    }
-    
 }
 let loadData=()=>{
     if(localStorage['data']){
@@ -237,6 +216,6 @@ function saveData(){
 setInterval(() =>{
     now = new Date();
     }, 1000)
-
 loadData();
 refresh();
+
