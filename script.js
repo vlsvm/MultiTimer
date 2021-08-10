@@ -1,18 +1,18 @@
 
 let now = new Date();
-let lessons =[];
-const lessonContainer = document.querySelector('.lessonContainer');
+let events =[];
+const eventContainer = document.querySelector('.eventContainer');
 const days = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
 const months=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь',
 'ноябрь','декабрь'];
 let displayDay = now.getDay();
-document.querySelector('#saveLesson').onclick=()=>{
-    createLesson();
+document.querySelector('#saveEvent').onclick=()=>{
+    createEvent();
 }
 document.querySelector('#btnSelectDay') .onclick=()=>{
     selectDisplayDay();
 }
-class Lesson{
+class Event{
     constructor(title,timeStart,timeEnd,days){
         this.title=title;
         this.start={
@@ -51,40 +51,40 @@ let selectDisplayDay=()=>{
    }
    refresh();
 }
-function check(lesson){
+function check(event){
     let time, header; 
-    updateState(lesson);
-    if((lesson.state==='Not started')){
+    updateState(event);
+    if((event.state==='Not started')){
         if(displayDay === now.getDay()){
-            time = findDifference(lesson.start);
+            time = findDifference(event.start);
             header = 'До начала осталось: ';
-            printTimeLeft(lesson,time,header) 
+            printTimeLeft(event,time,header) 
         }
-    }else if((lesson.state==='Ended')){
-        lesson.containerTimer.textContent='Закончено';
-    }else if(lesson.state==='Started'){
-        time = findDifference(lesson.end);
+    }else if((event.state==='Ended')){
+        event.containerTimer.textContent='Закончено';
+    }else if(event.state==='Started'){
+        time = findDifference(event.end);
         header = 'До конца осталось: ';
-        printTimeLeft(lesson,time,header);
+        printTimeLeft(event,time,header);
     }
 }
-function updateState(lesson){
-    let timeToStart=findDifference(lesson.start),
-    timeToEnd=findDifference(lesson.end);
+function updateState(event){
+    let timeToStart=findDifference(event.start),
+    timeToEnd=findDifference(event.end);
     if(now.getHours===0){ //в полночь обнуляемся
         refresh();
-        lesson.state='Not started';
+        event.state='Not started';
     }
     if((timeToEnd>0)&&(timeToStart>0)){
-        lesson.state='Not started';
+        event.state='Not started';
     }else if((timeToEnd>0)&&(timeToStart<0)){
-        lesson.state='Started';
-        lesson.container.classList.add('border');
-        lesson.container.classList.add('border-danger');
+        event.state='Started';
+        event.container.classList.add('border');
+        event.container.classList.add('border-danger');
     } else if((timeToEnd<0)&&(timeToStart<0)){
-        lesson.state='Ended';
-        lesson.container.classList.remove('border');
-        lesson.container.classList.remove('border-danger');
+        event.state='Ended';
+        event.container.classList.remove('border');
+        event.container.classList.remove('border-danger');
     } 
 }
 function findDifference(time){
@@ -94,82 +94,82 @@ function findDifference(time){
     difference = n-_now;
     return difference
 }
-function printMeta(lesson){
-    lesson.containerTitle.textContent=lesson.title;
-    lesson.containerStart.textContent=`Начало: ${lesson.start.hours}:${lesson.start.minutes}:${lesson.start.seconds}`;
-    lesson.containerEnd.textContent=`Конец: ${lesson.end.hours}:${lesson.end.minutes}:${lesson.end.seconds}`;
+function printMeta(event){
+    event.containerTitle.textContent=event.title;
+    event.containerStart.textContent=`Начало: ${event.start.hours}:${event.start.minutes}:${event.start.seconds}`;
+    event.containerEnd.textContent=`Конец: ${event.end.hours}:${event.end.minutes}:${event.end.seconds}`;
     let daysString='';
-    for(let i=0;i<lesson.days.length;i++){
-        if(lesson.days[i]===true){
-            lesson.days[i];
+    for(let i=0;i<event.days.length;i++){
+        if(event.days[i]===true){
+            event.days[i];
             daysString+=`${days[i]}, `
         }
     }
-    lesson.containerDays.textContent=`Дни недели: ${daysString}`;
+    event.containerDays.textContent=`Дни недели: ${daysString}`;
 }
-function printTimeLeft(lesson,difference,header){
+function printTimeLeft(event,difference,header){
         let hours = Math.floor(difference/(60*60));
         difference = difference % (60*60);
         let minutes = Math.floor(difference/60);
         difference = difference%60;
         let seconds = difference;
         let string =`${header} ${hours}:${minutes}:${seconds}`;
-        lesson.containerTimer.textContent=string;
+        event.containerTimer.textContent=string;
 }
-function deleteLesson(lesson){
-    lesson.container.parentNode.removeChild(lesson.container);
-    let index = lessons.findIndex((_lesson)=>{
-        return _lesson.id===lesson.id;
+function deleteEvent(event){
+    event.container.parentNode.removeChild(event.container);
+    let index = events.findIndex((_event)=>{
+        return _event.id===event.id;
     })
-    lessons.splice(index,1);
+    events.splice(index,1);
 }
-function initLesson(lesson){
-    lesson.container = document.createElement('div');
-    lesson.container.id=`lesson${lesson.id}`;
-    lesson.container.classList.add('lesson');
-    lesson.container.classList.add('col-md-3');
-    lesson.container.classList.add('card');
-    lesson.container.classList.add('p-2');
-    lesson.container.classList.add('shadow');
-    lessonContainer.append(lesson.container);
+function initEvent(event){
+    event.container = document.createElement('div');
+    event.container.id=`event${event.id}`;
+    event.container.classList.add('event');
+    event.container.classList.add('col-md-3');
+    event.container.classList.add('card');
+    event.container.classList.add('p-2');
+    event.container.classList.add('shadow');
+    eventContainer.append(event.container);
 
 
-    lesson.containerTitle = document.createElement('h3');
-    lesson.containerTitle.classList.add('lessonTitle');
-    lesson.container.append(lesson.containerTitle);
+    event.containerTitle = document.createElement('h3');
+    event.containerTitle.classList.add('eventTitle');
+    event.container.append(event.containerTitle);
 
-    lesson.containerStart = document.createElement('div');
-    lesson.containerStart.classList.add('timeStart');
-    lesson.container.append(lesson.containerStart);
+    event.containerStart = document.createElement('div');
+    event.containerStart.classList.add('timeStart');
+    event.container.append(event.containerStart);
 
-    lesson.containerEnd = document.createElement('div');
-    lesson.containerEnd.classList.add('timeEnd');
-    lesson.container.append(lesson.containerEnd);
+    event.containerEnd = document.createElement('div');
+    event.containerEnd.classList.add('timeEnd');
+    event.container.append(event.containerEnd);
 
-    lesson.containerTimer = document.createElement('div');
-    lesson.containerTimer.classList.add('font-weight-bold');
-    lesson.container.append(lesson.containerTimer);
+    event.containerTimer = document.createElement('div');
+    event.containerTimer.classList.add('font-weight-bold');
+    event.container.append(event.containerTimer);
 
-    lesson.btnDelete = document.createElement('img');
-    lesson.btnDelete.src='cross.png';
-    lesson.btnDelete.width='25';
-    lesson.btnDelete.id='btnDelete';
-    lesson.btnDelete.onclick=()=>{
-        deleteLesson(lesson);
+    event.btnDelete = document.createElement('img');
+    event.btnDelete.src='cross.png';
+    event.btnDelete.width='25';
+    event.btnDelete.id='btnDelete';
+    event.btnDelete.onclick=()=>{
+        deleteEvent(event);
         saveData();
     }
-    lesson.container.append(lesson.btnDelete);
+    event.container.append(event.btnDelete);
 
-    lesson.containerDays = document.createElement('div');
-    lesson.containerDays.classList.add('days');
-    lesson.container.append(lesson.containerDays);
+    event.containerDays = document.createElement('div');
+    event.containerDays.classList.add('days');
+    event.container.append(event.containerDays);
 
-    printMeta(lesson);
+    printMeta(event);
     setInterval(() =>{
-        check(lesson);
+        check(event);
         }, 1000)
 } 
-function createLesson(){
+function createEvent(){
     let title = document.querySelector('#inputTitle').value;
     let timePickerStart = document.querySelector('#timePickerStart').value;
     let timeStart = new Date(`${now.getFullYear()},${now.getMonth()},${now.getDate()} ${timePickerStart}`);
@@ -181,36 +181,36 @@ function createLesson(){
         if(checkbox.checked) return true;
         else return false;
     })
-    let lesson = new Lesson(title,timeStart,timeEnd,days);
+    let event = new Event(title,timeStart,timeEnd,days);
     if(timeEnd<timeStart){
-        lesson.state='Ended';
+        event.state='Ended';
     }
-    lessons.push(lesson);
+    events.push(event);
     saveData();
     refresh();
 }
 function refresh(){
     now = new Date();
     document.querySelector('#currentDateMessage').textContent = `Сегодня ${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
-    while(lessonContainer.firstChild){
-        lessonContainer.removeChild(lessonContainer.lastChild);
+    while(eventContainer.firstChild){
+        eventContainer.removeChild(eventContainer.lastChild);
     }
-    if(lessons.length!=0){
-        for(let i=0;i<lessons.length;i++){
-            if(lessons[i].days[displayDay]){
-                lessons[i].id=i;
-                initLesson(lessons[i]);
+    if(events.length!=0){
+        for(let i=0;i<events.length;i++){
+            if(events[i].days[displayDay]){
+                events[i].id=i;
+                initEvent(events[i]);
             }
         }   
     }
 }
 let loadData=()=>{
     if(localStorage['data']){
-        lessons = JSON.parse(localStorage['data']);
+        events = JSON.parse(localStorage['data']);
     }
 }
 function saveData(){
-    let saveData = JSON.stringify(lessons);
+    let saveData = JSON.stringify(events);
     localStorage.setItem('data',saveData);
 }
 setInterval(() =>{
